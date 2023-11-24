@@ -1,69 +1,10 @@
 import tkinter
-# from tkinter import *
-# from tkinter import ttk
-# from PIL import Image, ImageTk
-#
-# # # кнопочка тык
-# # def clickknopka():
-# #     label["text"] = txt.get()
-#
-# # новое окно для добавления новой машинки
-# def neww():
-#     newwc=Tk()
-#     newwc.title("Добавление нового автомобиля")
-#     newwc.geometry("500x400")
-#     newwc.configure(bg="khaki")
-#
-#     def clickknopka():
-#         label["text"] = txt.get()
-#
-#     # res= "Ввод номера автомобиля {}".format(txt.get())
-#     # lbl.configure(text=res)
-#     lbl = Label(newwc, text="Номер автомобиля:",fg="gray42",bg="honeydew3")
-#     lbl.place(x=10, y=50)
-#     txt = ttk.Entry(newwc, width=10)
-#     txt.place(x=165, y=50)
-#     click=ttk.Button(text="Click", command=clickknopka)
-#     click.place(x=200, y=50)
-#     label = ttk.Label()
-#     label.place(x=200, y=50)
-#
-#     newwc.mainloop()
-#
-#
-# # главное окно
-# window = Tk()
-# window.title("Добро пожаловать в автопарк")
-# window.geometry('600x500')
-# window.configure(bg="palegoldenrod")
-# nad=Label(window, text="Добро пожаловать в автопарк!",font=("Times New Roman",20), bg="khaki3", fg="gray40").pack(side='top')
-#
-#
-# # добавление новой машинки нажатием на картинку
-# newcar= 'newcar.jpg'
-# new=Image.open(newcar)
-# newcar=ImageTk.PhotoImage(new)
-# Button(window, image=newcar, command=neww).place(x=10, y=110)
-# dob=Label(window, text="Добавление машины", font=("Times New Roman",10),bg="papayawhip",fg="gray36").place(x=10,y=80)
-#
-#
-#
-#
-#
-# # lbl=Label(window, text="")
-# # lbl.grid(column=1,row=0)
-# # proba=Button(window, text='Тык, чтобы начать',command=clicked, bg="pink", fg="black")
-# # proba.grid(column=0, row=0)
-#
-# window.mainloop()
-
-
 from tkinter import *
 from tkinter import ttk
 from PIL import Image, ImageTk
 
 class Car:
-    def __init__(self, number, make, model, year, dvigat, horse, color, expense, windows, doors, brake, kasko):
+    def __init__(self, number, make, model, year, dvigat, horse, color, expense, windows, doors, brake, kasko, typedrive):
         self.number = number
         self.make = make
         self.model = model
@@ -76,11 +17,12 @@ class Car:
         self.doors = doors
         self.brake = brake
         self.kasko = kasko
+        self.typedrive = typedrive
 
 cars = []
 
-def add_car(number, make, model, year, dvigat, horse, color, expense, windows, doors, brake, kasko):
-    car = Car(number, make, model, year,dvigat, horse, color, expense, windows, doors, brake, kasko)
+def add_car(number, make, model, year, dvigat, horse, color, expense, windows, doors, brake, kasko, typedrive):
+    car = Car(number, make, model, year,dvigat, horse, color, expense, windows, doors, brake, kasko, typedrive)
     cars.append(car)
 
 def open_new_window():
@@ -150,14 +92,18 @@ def open_new_window():
     txt_kasko = ttk.Entry(new_window, width=10)
     txt_kasko.place(x=165, y=380)
 
+    lbl_typedrive = Label(new_window, text="Тип привода:", fg="gray42", bg="honeydew3")
+    lbl_typedrive.place(x=10, y=380+30)
+    cb_typedrive = ttk.Combobox(new_window, value = ['Передний','Задний', 'Полный'])
+    cb_typedrive.place(x=165, y=380+30)
 
 
     def clickknopka():
-        add_car(txt_number.get(), txt_make.get(), txt_model.get(), txt_year.get(), txt_dvigat.get(), txt_horse.get(), txt_color.get(), txt_expense.get(), txt_windows.get(), txt_doors.get(), txt_brake.get(), txt_kasko.get())
+        add_car(txt_number.get(), txt_make.get(), txt_model.get(), txt_year.get(), txt_dvigat.get(), txt_horse.get(), txt_color.get(), txt_expense.get(), txt_windows.get(), txt_doors.get(), txt_brake.get(), txt_kasko.get(), cb_typedrive.get())
         label["text"] = "Машина добавлена: " + txt_number.get()
 
     click = ttk.Button(new_window, text="Добавить", command=clickknopka)
-    click.place(x=270, y=390)
+    click.place(x=270, y=390+50)
 
 def open_all_window():
     all_window = Toplevel(window)
@@ -169,7 +115,7 @@ def open_all_window():
     lbl.pack()
 
     for car in cars:
-        car_info = f"Номер: {car.number}; \n Марка: {car.make}; \n Модель: {car.model}; \n Год: {car.year}; \n Объем двигателя: {car.dvigat}; \n Количество л. с.: {car.horse}: \n Цвет автомобиля: {car.color}: \n Расход топлива: {car.expense}; \n Положение окон: {car.windows}; \n Положение дверей: {car.doors}; \n Ручной тормоз: {car.brake}; \n Каско: {car.kasko} \n\n\n"
+        car_info = f"Номер: {car.number}; \n Марка: {car.make}; \n Модель: {car.model}; \n Год: {car.year}; \n Объем двигателя: {car.dvigat}; \n Количество л. с.: {car.horse}: \n Цвет автомобиля: {car.color}: \n Расход топлива: {car.expense}; \n Положение окон: {car.windows}; \n Положение дверей: {car.doors}; \n Ручной тормоз: {car.brake}; \n Каско: {car.kasko}; Тип привода: \n{car.typedrive}\n\n\n"
         lbl_car = Label(all_window, text=car_info, fg="gray42", bg="blanchedalmond")
         lbl_car.pack()
 
@@ -240,6 +186,11 @@ def open_create_window():
     txt_kasko = ttk.Entry(create_window, width=10)
     txt_kasko.place(x=190, y=380)
 
+    lbl_typedrive = Label(create_window, text="Новый тип привода:", fg="gray42", bg="honeydew3")
+    lbl_typedrive.place(x=10, y=380+30)
+    cb_typedrive = ttk.Combobox(create_window, value = ['Передний','Задний', 'Полный'])
+    cb_typedrive.place(x=190, y=380+30)
+
 
     label = ttk.Label()
 
@@ -252,7 +203,7 @@ def open_create_window():
                 label["text"] = f"Характеристики машины {car.number} изменены"
 
     click_create = ttk.Button(create_window, text="Изменить", command=click_create)
-    click_create.place(x=270, y=400)
+    click_create.place(x=270, y=400+50)
 
 
 window = Tk()
@@ -296,13 +247,3 @@ class TestCarFunctions(unittest.TestCase):
     def test_add_invalid_car(self):
         add_car("33333", "", "Accord", "2021", "2.0L", "190", "красный", "7.5L/100км", "опущены", "закрыты", "выключен", "нет")
         self.assertEqual(len(cars), 2)
-
-
-
-
-
-
-
-
-
-
