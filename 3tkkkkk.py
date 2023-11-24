@@ -1,7 +1,9 @@
 import tkinter
+from tkinter import messagebox
 from tkinter import *
 from tkinter import ttk
 from PIL import Image, ImageTk
+import re
 
 class Car:
     def __init__(self, number, make, model, year, dvigat, horse, color, expense, windows, doors, brake, kasko, typedrive):
@@ -21,9 +23,20 @@ class Car:
 
 cars = []
 
+def validate_carnum(num):
+    '''Проверка на корректность номера машины'''
+    return re.match('[ABEKMHOPCTYX]{1}[0-9]{3}[ABEKMHOPCTYX]{2}', num)
+
+def validate(text):
+    '''Проверка на заполненость поля'''
+    return text == ''
+
 def add_car(number, make, model, year, dvigat, horse, color, expense, windows, doors, brake, kasko, typedrive):
     car = Car(number, make, model, year,dvigat, horse, color, expense, windows, doors, brake, kasko, typedrive)
-    cars.append(car)
+    if (not validate_carnum(number)) or any(validate(i_value) for i_value in [number, make, model, year, dvigat, horse, color, expense, windows, doors, brake, kasko, typedrive]):
+        pass
+    else:
+        cars.append(car)
 
 def open_new_window():
     new_window = Toplevel(window)
@@ -100,7 +113,12 @@ def open_new_window():
 
     def clickknopka():
         add_car(txt_number.get(), txt_make.get(), txt_model.get(), txt_year.get(), txt_dvigat.get(), txt_horse.get(), txt_color.get(), txt_expense.get(), txt_windows.get(), txt_doors.get(), txt_brake.get(), txt_kasko.get(), cb_typedrive.get())
-        label["text"] = "Машина добавлена: " + txt_number.get()
+        if (not validate_carnum(txt_number.get())):
+            tkinter.messagebox.showerror('Ошибка', 'Неверный формат номера машины.')
+        elif any(validate(i_value) for i_value in [txt_number.get(), txt_make.get(), txt_model.get(), txt_year.get(), txt_dvigat.get(), txt_horse.get(), txt_color.get(), txt_expense.get(), txt_windows.get(), txt_doors.get(), txt_brake.get(), txt_kasko.get(), cb_typedrive.get()]):
+            tkinter.messagebox.showerror('Ошибка', 'Некоторые поля не заполнены.')
+        else:
+            label["text"] = "Машина добавлена: " + txt_number.get()
 
     click = ttk.Button(new_window, text="Добавить", command=clickknopka)
     click.place(x=270, y=390+50)
@@ -115,7 +133,7 @@ def open_all_window():
     lbl.pack()
 
     for car in cars:
-        car_info = f"Номер: {car.number}; \n Марка: {car.make}; \n Модель: {car.model}; \n Год: {car.year}; \n Объем двигателя: {car.dvigat}; \n Количество л. с.: {car.horse}: \n Цвет автомобиля: {car.color}: \n Расход топлива: {car.expense}; \n Положение окон: {car.windows}; \n Положение дверей: {car.doors}; \n Ручной тормоз: {car.brake}; \n Каско: {car.kasko}; Тип привода: \n{car.typedrive}\n\n\n"
+        car_info = f"Номер: {car.number}; \n Марка: {car.make}; \n Модель: {car.model}; \n Год: {car.year}; \n Объем двигателя: {car.dvigat}; \n Количество л. с.: {car.horse}: \n Цвет автомобиля: {car.color}: \n Расход топлива: {car.expense}; \n Положение окон: {car.windows}; \n Положение дверей: {car.doors}; \n Ручной тормоз: {car.brake}; \n Каско: {car.kasko}; \n Тип привода: \n{car.typedrive}\n\n\n"
         lbl_car = Label(all_window, text=car_info, fg="gray42", bg="blanchedalmond")
         lbl_car.pack()
 
